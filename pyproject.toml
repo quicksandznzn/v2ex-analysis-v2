@@ -1,0 +1,18 @@
+[project]
+name = "v2ex-analysis"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.27.0",
+    "mypy>=1.19.1",
+    "openai-agents>=0.6.4",
+    "openai>=1.30.0",
+    "pydantic>=2.6.0",
+    "python-dotenv>=1.0.1",
+    "ruff>=0.14.10",
+]
+
+[project.scripts]
+v2ex-agent = "main:main"
