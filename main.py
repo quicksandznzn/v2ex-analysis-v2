@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import nest_asyncio
+nest_asyncio.apply()
 import argparse
 import asyncio
 import logging
@@ -12,6 +14,20 @@ from agents.stream_events import RawResponsesStreamEvent
 from openai.types.responses.response_text_delta_event import ResponseTextDeltaEvent
 
 from v2ex import V2EXClient
+
+from openinference.instrumentation.openai_agents import OpenAIAgentsInstrumentor
+
+OpenAIAgentsInstrumentor().instrument()
+
+from langfuse import get_client
+
+langfuse = get_client()
+
+# Verify connection
+if langfuse.auth_check():
+    print("Langfuse client is authenticated and ready!")
+else:
+    print("Authentication failed. Please check your credentials and host.")
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +127,7 @@ def main() -> None:
     args = parser.parse_args()
 
     logging.basicConfig(
-        level=os.getenv("LOG_LEVEL", "INFO"),
+        level=os.getenv("LOG_LEVEL", "DEBUG"),
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
     )
     openai_model = os.getenv("OPENAI_MODEL") or "gpt-5.2"
